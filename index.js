@@ -9,11 +9,10 @@ const mongoose = require("mongoose");
 const { User, Conversation } = require("./Model/index");
 const bodyparser = require("body-parser");
 
-
 // database related ---------
 const connectttodatabase = async () => {
   try {
-    const db = await mongoose.connect("mongodb://0.0.0.0:27017/chat-app");
+    const db = await mongoose.connect("mongodb+srv://karthikgk:karthik123@cluster0.nxuwhxd.mongodb.net/?retryWrites=true&w=majority");
     //await Conversation.deleteMany({});
     console.log("connected");
   } catch (err) {
