@@ -50,6 +50,7 @@ socket.on("new user",(id)=>{
 })
 ////////////////////////////////
 socket.on('chat message',(chat)=>{
+    console.log(chat)
     let div = document.createElement('div');
     div.innerHTML= `<h4 class="messager">~${chat.sender}</h4><p>${chat.msg}</p>`;
     div.className = "message";
