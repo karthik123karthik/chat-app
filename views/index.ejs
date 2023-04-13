@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Whatsapp</title>
+    <script
+      src="https://kit.fontawesome.com/632f108976.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/qs@6.10.1/dist/qs.min.js"></script>
+  </head>
+  
+  <body class="chat-area">
+    <div class="top-bar">
+      <div class="profile">
+        <img
+          class="profile-image"
+          src="/profile-photo.jpg"
+          height="55px"
+          width="55px"
+        />
+      </div>
+      <div class="title">
+        <p>Programmers Group</p>
+      </div>
+      <button class="private-messaging"><a href="/privates" style="text-decoration: none; color:white">privat chats</a></button>
+      <div class="search">
+        <i class="fas fa-search"></i>
+        <i class="fas fa-ellipsis-v"></i>
+      </div>
+    </div>
+    <div style="position:absolute; overflow: scroll; " class="message-box">
+      <%for(var i=0;i<conversations.length;i++) { %>
+        <%if (conversations[i].type==="message"){%>
+          <div class="<%= (conversations[i].user === user) ? 'my-message' : 'message' %>"><h4 class="messager"><%=conversations[i].user%></h4><p><%=conversations[i].message%></p></div>
+          <%}else {%>
+            <div class="notification-message"><p><%=conversations[i].message%></p></div>
+        <%}%>
+        <%}%>
+    </div>
+    <form class="bottom-bar">
+      <div class="emoji-div">
+        <svg
+          height="20px"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        >
+          <path
+            fill="#54656F"
+            d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm177.6 62.1C192.8 334.5 218.8 352 256 352s63.2-17.5 78.4-33.9c9-9.7 24.2-10.4 33.9-1.4s10.4 24.2 1.4 33.9c-22 23.8-60 49.4-113.6 49.4s-91.7-25.5-113.6-49.4c-9-9.7-8.4-24.9 1.4-33.9s24.9-8.4 33.9 1.4zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+          />
+        </svg>
+        <svg
+          height="20px"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+        >
+          <path
+            fill="#54656F"
+            d="M360.2 83.8c-24.4-24.4-64-24.4-88.4 0l-184 184c-42.1 42.1-42.1 110.3 0 152.4s110.3 42.1 152.4 0l152-152c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-152 152c-64 64-167.6 64-231.6 0s-64-167.6 0-231.6l184-184c46.3-46.3 121.3-46.3 167.6 0s46.3 121.3 0 167.6l-176 176c-28.6 28.6-75 28.6-103.6 0s-28.6-75 0-103.6l144-144c10.9-10.9 28.7-10.9 39.6 0s10.9 28.7 0 39.6l-144 144c-6.7 6.7-6.7 17.7 0 24.4s17.7 6.7 24.4 0l176-176c24.4-24.4 24.4-64 0-88.4z"
+          />
+        </svg>
+      </div>
+      <div class="message-input">
+        <input id="input-bar" type="text" placeholder="Type a Message" autocomplete="off" />
+      </div>
+      <div class="mic-div">
+        <svg
+          height="20px"
+          width="20px"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 384 512"
+        >
+          <path
+            fill="#54656F"
+            d="M176 0C123 0 80 43 80 96V256c0 53 43 96 96 96s96-43 96-96V96c0-53-43-96-96-96zM48 216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 89.1 66.2 162.7 152 174.4V464H104c-13.3 0-24 10.7-24 24s10.7 24 24 24h72 72c13.3 0 24-10.7 24-24s-10.7-24-24-24H200V430.4c85.8-11.7 152-85.3 152-174.4V216c0-13.3-10.7-24-24-24s-24 10.7-24 24v40c0 70.7-57.3 128-128 128s-128-57.3-128-128V216z"
+          />
+        </svg>
+      </div>
+    </form>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/index.js" ></script>
+</html>
