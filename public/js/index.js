@@ -3,18 +3,19 @@ let path = location.pathname.split('/');
 let username = path[1].split("%20").join(" ");
 let room = path[2].split("%20").join(" ");
 
-/*var socket = io.connect("https://chat-app-10h9.onrender.com/",{
-  query:{
-    username: username,
-    room : room
-  }
-});*/
-var socket = io.connect("http://localhost:3000/",{
+var socket = io.connect("https://chat-app-10h9.onrender.com/",{
   query:{
     username: username,
     room : room
   }
 });
+/*var socket = io.connect("http://localhost:3000/",{
+  query:{
+    username: username,
+    room : room
+  }
+});
+*/
 //////////////////////
 socket.on('connect',()=>{
   console.log("connected")
