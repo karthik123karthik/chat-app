@@ -1,64 +1,115 @@
 <html>
+
 <head>
-    <link rel="stylesheet" href="views/app.css">
+    <link rel="stylesheet" href="views/app.css" />
+    <script src="https://kit.fontawesome.com/632f108976.js" crossorigin="anonymous"></script>
 </head>
 <style>
     body {
-    display: flex;
-    justify-content: center;
-}
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+    }
 
-form {
-    display: flex;
-    flex-direction: column;
-}
+    form {
+        display: flex;
+        flex-direction: column;
+    }
 
-.input-field {
-    position: relative;
-    margin-top: 2rem;
-}
+    .input-field {
+        position: relative;
+        margin-top: 2rem;
+    }
 
-.input-field input {
-    padding: 0.8rem;
-}
+    .input-field input {
+        padding: 0.8rem;
+    }
 
-form .input-field:first-child {
-    margin-bottom: 1.5rem;
-}
+    form .input-field:first-child {
+        margin-bottom: 1.5rem;
+    }
 
-form input[type="submit"] {
-    background: linear-gradient(to left, #4776E6, #8e54e9);
-    color: white;
-    border-radius: 4px;
-    margin-top: 2rem;
-    padding: 0.4rem;
-}
+    form input[type="submit"] {
+        background: linear-gradient(to left,#00a884, #0bedbc);
+        border:none;
+        color: white;
+        border-radius: 4px;
+        margin-top: 2rem;
+        padding: 0.4rem;
+    }
 
-.signup{
-    background: rgb(142, 255, 142);
-    color: rgb(22, 21, 21);
-    border-radius: 4px;
-    margin-top: 2rem;
-    padding: 0.4rem;
-    text-decoration: none;
-    text-align: center;
-}
+    .signup {
+        background: linear-gradient(to left,#00a884, #0bedbc);
+        color: white;
+        border-radius: 4px;
+        margin-top: 2rem;
+        padding: 0.4rem;
+        text-decoration: none;
+        text-align: center;
+    }
 
+    .top-bg {
+        width: 100vw;
+        height: 40vh;
+        background-color: #00a884;
+    }
 
+    .form-container {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        height: 80vh;
+        width: 60vw;
+        box-shadow: 0px 0px 6px #B2B2B2;
+        background-color: white;
+        position: absolute;
+        top: 20%;
+        left: 20%;
+        color: #41525D;
+        font-family: "Segoe UI", "Helvetica Neue", Helvetica, "Lucida Grande", Arial, Ubuntu, Cantarell, "Fira Sans", sans-serif;
+        font-weight: 500;
+    }
 
+    .top-header {
+        font-family: "Segoe UI", "Helvetica Neue", Helvetica, "Lucida Grande", Arial, Ubuntu, Cantarell, "Fira Sans", sans-serif;
+        font-weight: 500;
+        font-size: 34px;
+        color: #ffff;
+        justify-content: center;
+        margin-top: 50px;
+        display: flex;
+        align-items: center;
+        width:60%;
+    }
+   
 </style>
+
 <body>
-    <form  method="post">
-        <h2>Signup</h2>
-        <div class="input-field">
-            <input type="text" name="username" id="username" placeholder="Enter Username" class="name" autocomplete="off">
+    <div class="top-bg">
+        <h1 class="top-header"><img src="https://www.freepnglogos.com/uploads/whatsapp-logo-png-hd-2.png" width="60" alt="whatsapp logo png hd" /></a>Pro chat</h1>
+    </div>
+    <div class="form-container">
+        <div style="width:50%; height:80%;">
+            <form  method="post">
+                <h2>Signup</h2>
+                <div class="input-field">
+                    <input type="text" name="username" id="username" placeholder="Enter Username" class="name"
+                        autocomplete="off" />
+                </div>
+                <div class="input-field">
+                    <input type="password" name="password" id="password" placeholder="Enter Password" />
+                </div>
+                <input type="submit" value="LogIn" />
+            </form>
+            <p>
+                <%=error %>
+            </p>
+            <a href="/login" class="signup">login</a>
         </div>
-        <div class="input-field">
-            <input type="password" name="password" id="password" placeholder="Enter Password">
-        </div>
-        <input type="submit" value="SignUp">
-        <p><%=error%></p>
-        <a href="/" class="signup" >login</a>
-    </form>
+    </div>
 </body>
+
 </html>

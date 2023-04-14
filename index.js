@@ -9,6 +9,8 @@ const mongoose = require("mongoose");
 const { User, Conversation } = require("./Model/index");
 const bodyparser = require("body-parser");
 
+let PORT = process.env.PORT || 3000;
+
 // database related ---------
 const connectttodatabase = async () => {
   try {
@@ -105,6 +107,6 @@ io.on("connection", async (socket) => {
 });
 ///////////////////////////////////////////////////////
 
-server.listen(3000, () => {
+server.listen(PORT, () => {
   console.log("listening on port 3000");
 });
