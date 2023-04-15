@@ -33,10 +33,8 @@
     <div style="position:absolute; overflow: scroll; " class="message-box">
       <%for(var i=0;i<conversations.length;i++) { %>
         <%if (conversations[i].type==="message"){%>
-          <div class="<%= (conversations[i].user === user) ? 'my-message' : 'message' %>"><h4 class="messager"><%=conversations[i].user%></h4><p><%=conversations[i].message%></p></div>
-          <%}else {%>
-            <div class="notification-message"><p><%=conversations[i].message%></p></div>
-        <%}%>
+          <div class="<%= (conversations[i].user === user) ? 'my-message' : 'message' %>"><h4 class="messager"><%=conversations[i].user%> <h5><%= conversations[i].time%></h5></h4><p><%=conversations[i].message%></p></div>
+          <%}%>
         <%}%>
     </div>
     <form class="bottom-bar">

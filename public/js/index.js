@@ -3,19 +3,20 @@ let path = location.pathname.split('/');
 let username = path[1].split("%20").join(" ");
 let room = path[2].split("%20").join(" ");
 
-var socket = io.connect("https://chat-app-10h9.onrender.com/",{
-  query:{
-    username: username,
-    room : room
-  }
-});
-/*var socket = io.connect("http://localhost:3000/",{
+/*var socket = io.connect("https://chat-app-10h9.onrender.com/",{
   query:{
     username: username,
     room : room
   }
 });
 */
+var socket = io.connect("http://localhost:3000/",{
+  query:{
+    username: username,
+    room : room
+  }
+});
+
 //////////////////////
 socket.on('connect',()=>{
   console.log("connected")
@@ -31,7 +32,7 @@ form.addEventListener('submit',(e)=>{
     if(input.value){
         socket.emit('chat message',input.value);
         let div = document.createElement('div');
-        div.innerHTML= `<h4 class="messager">~${username}</h4><p>${input.value}</p>`;
+        div.innerHTML= `<h4 class="messager">~${username}<span style="margin-left:5px; color:black">${Date.now().toString()}</span></h4><p>${input.value}</p>`;
         div.className = "my-message";
         messagebox.appendChild(div);
         window.scrollTo(0, document.body.scrollHeight);
@@ -59,7 +60,7 @@ socket.on("new user",(id)=>{
 socket.on('chat message',(chat)=>{
     console.log(chat)
     let div = document.createElement('div');
-    div.innerHTML= `<h4 class="messager">~${chat.sender}</h4><p>${chat.msg}</p>`;
+    div.innerHTML= `<h4 class="messager">~${chat.sender}<span style="margin-left:5px; color:black">${chat.time}</span></h4><p>${chat.msg}</p>`;
     div.className = "message";
     messagebox.appendChild(div);
     window.scrollTo(0, document.body.scrollHeight);

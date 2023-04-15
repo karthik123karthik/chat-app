@@ -8,6 +8,7 @@ const io = new Server(server);
 const mongoose = require("mongoose");
 const { User, Conversation } = require("./Model/index");
 const bodyparser = require("body-parser");
+const moment = require('moment');
 
 let PORT = process.env.PORT || 3000;
 
@@ -15,7 +16,7 @@ let PORT = process.env.PORT || 3000;
 const connectttodatabase = async () => {
   try {
     const db = await mongoose.connect("mongodb+srv://karthikgk:karthik123@cluster0.nxuwhxd.mongodb.net/?retryWrites=true&w=majority");
-    //await Conversation.deleteMany({});
+    await Conversation.deleteMany({});
     console.log("connected");
   } catch (err) {
     console.log(err);
@@ -75,31 +76,21 @@ app.get("/:username/chat", async (req, res) => {
 io.on("connection", async (socket) => {
   try {
     let userid = socket.handshake.query.username;
-    let newmessage = new Conversation({
-      type: "notification",
-      user: `${userid}`,
-      message: `${userid} joined`,
-    });
-    await newmessage.save();
     io.emit("new user", userid);
     socket.on("disconnect", async () => {
-      let newmessage = new Conversation({
-        type: "notification",
-        user: `${userid}`,
-        message: `${userid} left`,
-      });
-      await newmessage.save();
       io.emit("disconnected", userid);
     });
 
     socket.on("chat message", async (msg) => {
+      let now  = moment().format("DD:MM:YYYY");
       let newmessage = new Conversation({
         type: "message",
         user: `${userid}`,
         message: msg,
+        time:now
       });
       await newmessage.save();
-      socket.broadcast.emit("chat message", {sender:userid, msg:msg});
+      socket.broadcast.emit("chat message", {sender:userid, msg:msg, time:now});
     });
   } catch (err) {
     console.log(err);
