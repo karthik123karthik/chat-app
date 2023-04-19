@@ -24,7 +24,14 @@
       <div class="title">
         <p>Programmers Group</p>
       </div>
-      <button class="private-messaging"><a href="/privates" style="text-decoration: none; color:white">privat chats</a></button>
+      <select class="private-messaging">
+        <option disabled selected>Select the room</option>
+        <option value="Python">Python</option>
+        <option value="Javascript">Javascript</option>
+        <option value="C">C</option>
+        <option vlaue="C++">C++</option>
+      </select>
+
       <div class="search">
         <i class="fas fa-search"></i>
         <i class="fas fa-ellipsis-v"></i>
@@ -33,7 +40,7 @@
     <div style="position:absolute; overflow: scroll; " class="message-box">
       <%for(var i=0;i<conversations.length;i++) { %>
         <%if (conversations[i].type==="message"){%>
-          <div class="<%= (conversations[i].user === user) ? 'my-message' : 'message' %>"><h4 class="messager"><%=conversations[i].user%> <h5><%= conversations[i].time%></h5></h4><p><%=conversations[i].message%></p></div>
+          <div class="<%= (conversations[i].user === user) ? 'my-message' : 'message' %>"><h4 class="messager"><%=conversations[i].user%> </h4><p><%=conversations[i].message%></p><span style="text-align:right; padding:2px; font-size:11px; font-weight:400; line-height:15px; color:#667781;font-family:'Segoe UI','Helvetica Neue', Tahoma, Geneva, Verdana, sans-serif;"><%=conversations[i].time%></span></div>
           <%}%>
         <%}%>
     </div>

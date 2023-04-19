@@ -65,7 +65,7 @@ app.post("/", async(req, res) => {
   }
 });
 
-app.get("/:username/chat", async (req, res) => {
+app.get("/:username/:chat", async (req, res) => {
   const arr = await Conversation.find({});
   let {username} = req.params;
   res.render("index", { conversations: arr, user:username});
@@ -82,7 +82,7 @@ io.on("connection", async (socket) => {
     });
 
     socket.on("chat message", async (msg) => {
-      let now  = moment().format("DD:MM:YYYY");
+      let now  = moment().format('MMMM Do YY');
       let newmessage = new Conversation({
         type: "message",
         user: `${userid}`,
