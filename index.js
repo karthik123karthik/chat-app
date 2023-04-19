@@ -16,7 +16,6 @@ let PORT = process.env.PORT || 3000;
 const connectttodatabase = async () => {
   try {
     const db = await mongoose.connect("mongodb+srv://karthikgk:karthik123@cluster0.nxuwhxd.mongodb.net/?retryWrites=true&w=majority");
-    await Conversation.deleteMany({});
     console.log("connected");
   } catch (err) {
     console.log(err);
@@ -55,7 +54,6 @@ app.post("/", async(req, res) => {
   let user = await User.find({name:username});
   if(user.length>0){
     if(user[0].password === password) {
-      res.cookie = {username:username};
       res.redirect(`/${username}/chat`);
     } 
     else res.render("login",{error:"incorrect password"});
@@ -66,8 +64,8 @@ app.post("/", async(req, res) => {
 });
 
 app.get("/:username/:chat", async (req, res) => {
-  const arr = await Conversation.find({});
-  let {username} = req.params;
+  let {username, chat} = req.params;
+  const arr = await Conversation.find({room:chat});
   res.render("index", { conversations: arr, user:username});
 });
 
@@ -76,9 +74,11 @@ app.get("/:username/:chat", async (req, res) => {
 io.on("connection", async (socket) => {
   try {
     let userid = socket.handshake.query.username;
-    io.emit("new user", userid);
+    let room = socket.handshake.query.room; 
+    socket.join(room);
+    io.to(room).emit("new user", userid);
     socket.on("disconnect", async () => {
-      io.emit("disconnected", userid);
+      io.to(room).emit("disconnected", userid);
     });
 
     socket.on("chat message", async (msg) => {
@@ -87,10 +87,11 @@ io.on("connection", async (socket) => {
         type: "message",
         user: `${userid}`,
         message: msg,
-        time:now
+        time:now,
+        room:room
       });
       await newmessage.save();
-      socket.broadcast.emit("chat message", {sender:userid, msg:msg, time:now});
+      socket.to(room).emit("chat message", {sender:userid, msg:msg, time:now});
     });
   } catch (err) {
     console.log(err);
