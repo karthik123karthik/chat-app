@@ -17,14 +17,14 @@ var socket = io.connect("https://chat-app-10h9.onrender.com/",{
     room : room
   }
 });
-/*
-var socket = io.connect("http://localhost:3000/",{
+
+/*var socket = io.connect("http://localhost:3000/",{
   query:{
     username: username,
     room : room
   }
-});
-*/
+});*/
+
 
 //////////////////////
 socket.on('connect',()=>{

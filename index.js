@@ -9,6 +9,9 @@ const mongoose = require("mongoose");
 const { User, Conversation } = require("./Model/index");
 const bodyparser = require("body-parser");
 const moment = require('moment');
+const bcrypt = require('bcrypt');
+const cookieparser = require("cookie-parser");
+const saltRounds = 10;
 
 let PORT = process.env.PORT || 3000;
 
@@ -28,6 +31,7 @@ connectttodatabase();
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyparser.urlencoded({ extended: false }));
+app.use(cookieparser());
 /////////////////////////////////////////////////
 
 app.get("/", (req, res) => {
@@ -41,10 +45,14 @@ app.get("/signup", (req, res) => {
 app.post("/signup", async(req, res)=>{
   try{
      const {username, password} = req.body;
-     let user = new User({name:username,password:password});
-     await user.save();
+     bcrypt.hash(password, saltRounds, async function(err, hash) {
+      let user = new User({name:username,password:hash});    
+      await user.save();
+     });
+     res.cookie(username , username);
      res.redirect(`/${username}/chat`)
   }catch(err){
+    console.log(err)
       res.render("signup",{error:"username already exists"})
   }
 })
@@ -53,10 +61,14 @@ app.post("/", async(req, res) => {
   const {username, password} = req.body;
   let user = await User.find({name:username});
   if(user.length>0){
-    if(user[0].password === password) {
-      res.redirect(`/${username}/chat`);
-    } 
-    else res.render("login",{error:"incorrect password"});
+     let hash = user[0].password
+    bcrypt.compare(password, hash, function(err, result) {
+      if(result === true) {
+        res.cookie(username, username);
+        res.redirect(`/${username}/chat`);
+      }
+      else res.render("login",{error:"incorrect password"});
+  });
   }
   else {
     res.render("login",{error:"User not found"});
@@ -65,6 +77,10 @@ app.post("/", async(req, res) => {
 
 app.get("/:username/:chat", async (req, res) => {
   let {username, chat} = req.params;
+  if(!req.cookies[username]){
+    res.redirect("/");
+    return;
+}
   const arr = await Conversation.find({room:chat});
   res.render("index", { conversations: arr, user:username});
 });
