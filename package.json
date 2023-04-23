@@ -21,6 +21,7 @@
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "font-awesome": "^4.7.0",
+    "hybrid-crypto-js": "^0.2.4",
     "moment": "^2.29.4",
     "mongodb": "^4.4.0",
     "mongoose": "^7.0.1",

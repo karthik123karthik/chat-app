@@ -11,6 +11,7 @@ const bodyparser = require("body-parser");
 const moment = require('moment');
 const bcrypt = require('bcrypt');
 const cookieparser = require("cookie-parser");
+const {publicKey, encryptMessage, decryptMessage} = require("./RSA");
 const saltRounds = 10;
 
 let PORT = process.env.PORT || 3000;
