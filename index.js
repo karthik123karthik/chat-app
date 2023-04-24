@@ -12,7 +12,7 @@ const moment = require('moment');
 const bcrypt = require('bcrypt');
 const cookieparser = require("cookie-parser");
 const saltRounds = 10;
-const {decryptMessage, encryptMessage} = require("./rsa");
+const {decryptMessage, encryptMessage} = require("./RSA");
 require('dotenv').config({path:".env"});
 /////////////////////////////////////////////////////////////////
 let PORT = process.env.PORT || 3000;
