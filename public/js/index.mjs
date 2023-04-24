@@ -1,4 +1,4 @@
-//import {publicKey, encryptMessage, decryptMessage} from "./client-RSA.mjs"
+
 ////////////////////////////////////
 let path = location.pathname.split('/');
 let username = path[1].split("%20").join(" ");
@@ -11,10 +11,9 @@ const profile = {
   "C":"c.jpg"
 }
 
-//console.log(encryptMessage("hello world", publicKey));
 
 //////////////////////////////////
- var socket = io.connect("https://chat-app-10h9.onrender.com/",{
+var socket = io.connect("https://chat-app-10h9.onrender.com/",{
   query:{
     username: username,
     room : room
@@ -22,13 +21,14 @@ const profile = {
 });
 
 
-/*var socket = io.connect("http://localhost:3000/",{
+
+/* var socket = io.connect("http://localhost:3000/",{
   query:{
     username: username,
     room : room
   }
-});
-*/
+});*/
+
 
 
 //////////////////////

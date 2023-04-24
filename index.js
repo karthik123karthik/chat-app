@@ -11,15 +11,17 @@ const bodyparser = require("body-parser");
 const moment = require('moment');
 const bcrypt = require('bcrypt');
 const cookieparser = require("cookie-parser");
-const {publicKey, encryptMessage, decryptMessage} = require("./RSA");
 const saltRounds = 10;
-
+const {decryptMessage, encryptMessage} = require("./rsa");
+require('dotenv').config({path:".env"});
+/////////////////////////////////////////////////////////////////
 let PORT = process.env.PORT || 3000;
 
 // database related ---------
 const connectttodatabase = async () => {
   try {
     const db = await mongoose.connect("mongodb+srv://karthikgk:karthik123@cluster0.nxuwhxd.mongodb.net/?retryWrites=true&w=majority");
+    //await Conversation.deleteMany({});    
     console.log("connected");
   } catch (err) {
     console.log(err);
@@ -83,7 +85,11 @@ app.get("/:username/:chat", async (req, res) => {
     return;
 }
   const arr = await Conversation.find({room:chat});
-  res.render("index", { conversations: arr, user:username});
+  let decryptedarray = await Promise.all(arr.map(async(ele) => {
+    let msg = await decryptMessage(ele.message, process.env.SERVER_PRIVATE_KEY);
+    return {...(ele._doc),message : msg}
+  }))
+  res.render("index", { conversations: decryptedarray, user:username});
 });
 
 
@@ -100,10 +106,11 @@ io.on("connection", async (socket) => {
 
     socket.on("chat message", async (msg) => {
       let now  = moment().format('MMMM Do YY');
+      let encryptedMessage = await encryptMessage(msg, process.env.SERVER_PUBLIC_KEY)
       let newmessage = new Conversation({
         type: "message",
         user: `${userid}`,
-        message: msg,
+        message:encryptedMessage,
         time:now,
         room:room
       });

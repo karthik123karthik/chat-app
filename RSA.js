@@ -1,25 +1,39 @@
-var RSA = require('hybrid-crypto-js').RSA;
-var Crypt = require('hybrid-crypto-js').Crypt;
+var RSA = require("hybrid-crypto-js").RSA;
+var Crypt = require("hybrid-crypto-js").Crypt;
 
 var crypt = new Crypt();
 var rsa = new RSA();
 
-let publicKey;
-let privateKey;
+/* 
 
-rsa.generateKeyPair(function(keyPair) {
-     publicKey = keyPair.publicKey;
-     privateKey = keyPair.privateKey;
-}, 1024);
+code used to generate keys
 
-function encryptMessage(message, publickey){
-    let encMessage = crypt.encrypt(publickey, message);
-    return encMessage.message;
+function generateKey() {
+  return new Promise(function(resolve, reject) {
+    rsa.generateKeyPair(function(keyPair) {
+      resolve(keyPair);
+    });
+  });
 }
 
-function decryptMessage(message, privatekey){
-    let decMessage =  crypt.decrypt(privateKey, encrypted);
-    return decMessage.message;
+async function consolekey(){
+  let keys = await generateKey()
+  console.log(keys.privateKey, keys.publicKey);
 }
 
-module.exports = {publicKey, encryptMessage, decryptMessage};
+consolekey();
+
+
+*/
+
+async function encryptMessage(message, publicKey) {
+  let encryptedMessage = await crypt.encrypt(publicKey, message);
+  return encryptedMessage;
+}
+
+async function decryptMessage(encryptedMessage, privateKey) {
+  let decryptedMessage = await crypt.decrypt(privateKey, encryptedMessage);
+  return decryptedMessage.message;
+}
+
+module.exports = {decryptMessage, encryptMessage };
