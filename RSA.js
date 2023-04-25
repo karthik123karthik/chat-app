@@ -1,39 +1,24 @@
-var RSA = require("hybrid-crypto-js").RSA;
-var Crypt = require("hybrid-crypto-js").Crypt;
+const forge = require('node-forge');
 
-var crypt = new Crypt();
-var rsa = new RSA();
-
-/* 
-
-code used to generate keys
-
-function generateKey() {
-  return new Promise(function(resolve, reject) {
-    rsa.generateKeyPair(function(keyPair) {
-      resolve(keyPair);
-    });
-  });
-}
-
-async function consolekey(){
-  let keys = await generateKey()
-  console.log(keys.privateKey, keys.publicKey);
-}
-
-consolekey();
+// Generate a new RSA key pair
+//const keyPair = forge.pki.rsa.generateKeyPair({bits: 2048});
 
 
-*/
+// Convert the public key to PEM format
+//const publicKeyPem = forge.pki.publicKeyToPem(keyPair.publicKey);
+//const privateKeyPem = forge.pki.privateKeyToPem(keyPair.privateKey);
 
-async function encryptMessage(message, publicKey) {
-  let encryptedMessage = await crypt.encrypt(publicKey, message);
+//console.log(privateKeyPem)
+//console.log(publicKeyPem);
+
+function encryptMessage(message, publicKey) {
+  const encryptedMessage = forge.pki.publicKeyFromPem(publicKey).encrypt(message);  
   return encryptedMessage;
 }
 
-async function decryptMessage(encryptedMessage, privateKey) {
-  let decryptedMessage = await crypt.decrypt(privateKey, encryptedMessage);
-  return decryptedMessage.message;
+function decryptMessage(encryptedMessage, privateKey) {
+   const decryptedMessage = forge.pki.privateKeyFromPem(privateKey).decrypt(encryptedMessage);  
+  return decryptedMessage;
 }
 
 module.exports = {decryptMessage, encryptMessage };

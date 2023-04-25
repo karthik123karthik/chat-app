@@ -1,8 +1,11 @@
+import { PUBLIC_KEY, PRIVATE_KEY} from "./keys.js";
+let SERVER_PUBLIC_KEY;
 
 ////////////////////////////////////
 let path = location.pathname.split('/');
 let username = path[1].split("%20").join(" ");
 let room = path[2].split("%20").join(" ");
+
 
 const profile = {
   "Python":"python.png",
@@ -13,21 +16,22 @@ const profile = {
 
 
 //////////////////////////////////
-var socket = io.connect("https://chat-app-10h9.onrender.com/",{
+/*var socket = io.connect("https://chat-app-10h9.onrender.com/",{
   query:{
     username: username,
     room : room
   }
 });
+*/
 
 
-
-/* var socket = io.connect("http://localhost:3000/",{
+ var socket = io.connect("http://localhost:3000/",{
   query:{
     username: username,
-    room : room
+    room : room,
+    clientPublicKey: PUBLIC_KEY
   }
-});*/
+});
 
 
 
@@ -56,7 +60,8 @@ else {
 form.addEventListener('submit',(e)=>{
     e.preventDefault()
     if(input.value){
-        socket.emit('chat message',input.value);
+        let encryptedMessage = forge.pki.publicKeyFromPem(SERVER_PUBLIC_KEY).encrypt(input.value);
+        socket.emit('chat message',encryptedMessage);
         let div = document.createElement('div');
         div.innerHTML= `<h4 class="messager">~${username}</h4><p>${input.value}</p><span style="text-align:right; padding:2px; font-size:11px; font-weight:400; line-height:15px; color:#667781;font-family:'Segoe UI','Helvetica Neue', Tahoma, Geneva, Verdana, sans-serif;">today</span>`;
         div.className = "my-message";
@@ -87,11 +92,17 @@ socket.on("new user",(id)=>{
     window.scrollTo(0, document.body.scrollHeight);
 })
 ////////////////////////////////
-socket.on('chat message',(chat)=>{
+socket.on('chat message',async(chat)=>{
     let div = document.createElement('div');
-    div.innerHTML= `<h4 class="messager">~${chat.sender}</h4><p>${chat.msg}</p><span style="text-align:right; padding:2px; font-size:11px; font-weight:400; line-height:15px; color:#667781; font-family:'Segoe UI','Helvetica Neue', Tahoma, Geneva, Verdana, sans-serif;">${chat.time}</span>`;
+    let decryptedmessage = forge.pki.privateKeyFromPem(PRIVATE_KEY).decrypt(chat.msg);
+    div.innerHTML= `<h4 class="messager">~${chat.sender}</h4><p>${decryptedmessage}</p><span style="text-align:right; padding:2px; font-size:11px; font-weight:400; line-height:15px; color:#667781; font-family:'Segoe UI','Helvetica Neue', Tahoma, Geneva, Verdana, sans-serif;">${chat.time}</span>`;
     div.className = "message";
     messagebox.appendChild(div);
     window.scrollTo(0, document.body.scrollHeight);
 })
 ///////////////////////////
+
+socket.on("serverPublicKey",(key)=>{
+  SERVER_PUBLIC_KEY = key;
+})
+///////////////////////////////////////////////////////////

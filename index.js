@@ -12,7 +12,7 @@ const moment = require('moment');
 const bcrypt = require('bcrypt');
 const cookieparser = require("cookie-parser");
 const saltRounds = 10;
-const {decryptMessage, encryptMessage} = require("./RSA");
+const {decryptMessage, encryptMessage} = require("./RSA.js");
 require('dotenv').config({path:".env"});
 /////////////////////////////////////////////////////////////////
 let PORT = process.env.PORT || 3000;
@@ -21,7 +21,7 @@ let PORT = process.env.PORT || 3000;
 const connectttodatabase = async () => {
   try {
     const db = await mongoose.connect("mongodb+srv://karthikgk:karthik123@cluster0.nxuwhxd.mongodb.net/?retryWrites=true&w=majority");
-    //await Conversation.deleteMany({});    
+     await Conversation.deleteMany({});    
     console.log("connected");
   } catch (err) {
     console.log(err);
@@ -85,10 +85,10 @@ app.get("/:username/:chat", async (req, res) => {
     return;
 }
   const arr = await Conversation.find({room:chat});
-  let decryptedarray = await Promise.all(arr.map(async(ele) => {
-    let msg = await decryptMessage(ele.message, process.env.SERVER_PRIVATE_KEY);
+  let decryptedarray = arr.map((ele) => {
+    let msg = decryptMessage(ele.message, process.env.SERVER_PRIVATE_KEY);
     return {...(ele._doc),message : msg}
-  }))
+  })
   res.render("index", { conversations: decryptedarray, user:username});
 });
 
@@ -97,16 +97,20 @@ app.get("/:username/:chat", async (req, res) => {
 io.on("connection", async (socket) => {
   try {
     let userid = socket.handshake.query.username;
-    let room = socket.handshake.query.room; 
+    let room = socket.handshake.query.room;
+    let clientPublicKey = socket.handshake.query.clientPublicKey;
     socket.join(room);
+    io.to(room).emit("serverPublicKey", process.env.SERVER_PUBLIC_KEY);
     io.to(room).emit("new user", userid);
     socket.on("disconnect", async () => {
       io.to(room).emit("disconnected", userid);
     });
 
-    socket.on("chat message", async (msg) => {
+    socket.on("chat message", async (encryptedMessageWithServerPublicKey) => {
       let now  = moment().format('MMMM Do YY');
-      let encryptedMessage = await encryptMessage(msg, process.env.SERVER_PUBLIC_KEY)
+      let actmsg = decryptMessage(encryptedMessageWithServerPublicKey, process.env.SERVER_PRIVATE_KEY);
+      let encryptedMessage = encryptMessage(actmsg, process.env.SERVER_PUBLIC_KEY);
+      let encryptedMessagewithClientPublicKey = encryptMessage(actmsg,clientPublicKey);
       let newmessage = new Conversation({
         type: "message",
         user: `${userid}`,
@@ -115,7 +119,7 @@ io.on("connection", async (socket) => {
         room:room
       });
       await newmessage.save();
-      socket.to(room).emit("chat message", {sender:userid, msg:msg, time:now});
+      socket.to(room).emit("chat message", {sender:userid, msg:encryptedMessagewithClientPublicKey, time:now});
     });
   } catch (err) {
     console.log(err);
