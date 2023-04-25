@@ -21,7 +21,7 @@ let PORT = process.env.PORT || 3000;
 const connectttodatabase = async () => {
   try {
     const db = await mongoose.connect("mongodb+srv://karthikgk:karthik123@cluster0.nxuwhxd.mongodb.net/?retryWrites=true&w=majority");
-     await Conversation.deleteMany({});    
+     //await Conversation.deleteMany({});    
     console.log("connected");
   } catch (err) {
     console.log(err);
