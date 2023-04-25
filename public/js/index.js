@@ -16,16 +16,7 @@ const profile = {
 
 
 //////////////////////////////////
-/*var socket = io.connect("https://chat-app-10h9.onrender.com/",{
-  query:{
-    username: username,
-    room : room
-  }
-});
-*/
-
-
- var socket = io.connect("http://localhost:3000/",{
+var socket = io.connect("https://chat-app-10h9.onrender.com/",{
   query:{
     username: username,
     room : room,
@@ -33,6 +24,16 @@ const profile = {
   }
 });
 
+
+
+ /*var socket = io.connect("http://localhost:3000/",{
+  query:{
+    username: username,
+    room : room,
+    clientPublicKey: PUBLIC_KEY
+  }
+});
+*/
 
 
 //////////////////////
