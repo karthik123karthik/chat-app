@@ -30,6 +30,9 @@ VISIT THE PAGE HERE : https://chat-app-10h9.onrender.com
 #### LOGIN PAGE
 <img width="957" alt="chat-login" src="https://user-images.githubusercontent.com/84716922/234852016-98ef5a99-cef8-4bde-bc7e-85f7becd5f53.png">
 
+#### CHAT PAGE
+<img width="959" alt="chat-page" src="https://user-images.githubusercontent.com/84716922/234852219-e1bd1115-917a-45fe-a502-0a74584e9a06.png">
+
 
 
 VISIT THE PAGE HERE : https://chat-app-10h9.onrender.com
