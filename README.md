@@ -9,7 +9,7 @@ VISIT THE PAGE HERE : https://chat-app-10h9.onrender.com
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ### FEATURES AVAILABLE
 - Easy SignUp and login Page
-- Join different rooms based On Interest
+- Join different rooms based On Interest(C++, Python, Javascript)
 - messages that are made will be stored and will be persistent
 - Encryption will be done before updating message in the DataBase
 - RSA Algorithm is used for security in the process of Message Transfer
